@@ -1,0 +1,14 @@
+.git/**
+.github/**
+.vscode/**
+.vscode-test/**
+assets/*.sketch
+node_modules/**
+out/**
+scripts/**
+src/**
+testProject/**
+tmp/**
+.*
+tsconfig.json
+webpack.config.json

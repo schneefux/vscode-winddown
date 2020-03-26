@@ -1,0 +1,25 @@
+{
+  // https://code.visualstudio.com/docs/editor/debugging
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "stopOnEntry": false,
+      "sourceMaps": true,
+      "preLaunchTask": "npm: dev",
+      "args": [
+        "--user-data-dir=${workspaceFolder}/tmp",
+        "--disable-extensions=true",
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--enable-proposed-api=muuvmuuv.vscode-sundial",
+        "${workspaceFolder}/testProject"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/dist/*.js"
+      ]
+    }
+  ]
+}

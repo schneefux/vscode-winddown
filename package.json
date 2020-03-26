@@ -1,0 +1,50 @@
+{
+  "name": "vscode-winddown",
+  "displayName": "Winddown",
+  "version": "0.0.1",
+  "description": "",
+  "author": {
+    "name": "schneefux"
+  },
+  "main": "dist/extension.js",
+  "scripts": {
+    "dev": "webpack --mode development --progress",
+    "prod": "webpack --mode production --progress --env.analyze",
+    "watch": "webpack --mode development --watch",
+    "vscode:prepublish": "webpack --mode production",
+    "lint": "run-s lint:*",
+    "lint:js": "eslint --cache --ext js,ts src",
+    "lint:commit": "commitlint --from HEAD~1",
+    "compile": "tsc -p .",
+    "release": "env-cmd -f .env release-it",
+    "pretty": "pretty-quick"
+  },
+  "dependencies": {
+    "chroma-js": "^2.1.0",
+    "json5": "^2.1.2"
+  },
+  "devDependencies": {
+    "@types/chroma-js": "^2.0.0",
+    "@types/json5": "0.0.30",
+    "@types/node": "12.12.26",
+    "@types/vscode": "1.42.0",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "terser-webpack-plugin": "^2.3.5",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-cli": "^3.3.10"
+  },
+  "engines": {
+    "vscode": "^1.42.0"
+  },
+  "activationEvents": [
+    "*"
+  ]
+}
