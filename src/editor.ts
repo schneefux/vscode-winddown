@@ -1,18 +1,24 @@
 import { workspace, window, extensions } from 'vscode'
-import * as path from 'path'
 import { readFileSync } from 'fs'
-import json5 from 'json5'
+import * as path from 'path'
 import * as chroma from 'chroma-js'
+import json5 from 'json5'
 
 interface ThemeColors {
   [key: string]: string;
 }
 
-const getThemeColors = (themeName: string): { colors: ThemeColors, tokenRules: any[] } => {
+/**
+ * Load the current theme's configuration files.
+ * @param themeName Theme to search for
+ * @returns colors and tokenRules
+ */
+function getThemeColors(themeName: string): { colors: ThemeColors, tokenRules: any[] } {
+  // workaround for https://github.com/Microsoft/vscode/issues/32813
   let currentThemePath = null as string|null;
   for (const extension of extensions.all) {
     const themes = extension.packageJSON.contributes?.themes;
-    const currentTheme = themes?.find(theme => theme.id === themeName);
+    const currentTheme = themes?.find(theme => theme.id === themeName || theme.label === themeName);
     if (currentTheme !== undefined) {
       currentThemePath = path.join(extension.extensionPath, currentTheme.path);
       break;
@@ -25,6 +31,7 @@ const getThemeColors = (themeName: string): { colors: ThemeColors, tokenRules: a
   }
 
   let colors = {} as ThemeColors;
+  colors['statusBar.background'] = '#007ACC'; // missing default
   let tokenRules = [] as any[];
   while (themePaths.length > 0) {
     const themePath = themePaths.pop() as string;
@@ -46,9 +53,13 @@ const getThemeColors = (themeName: string): { colors: ThemeColors, tokenRules: a
   };
 }
 
+/**
+ * Update the workspace configuration file.
+ * @param settings key-values to write into the configuration
+ */
 function applySettings(settings: object) {
   if (!settings) {
-    return // no settings, nothing to do
+    return
   }
   const workspaceSettings = workspace.getConfiguration()
   Object.keys(settings).forEach((k) => {
@@ -63,6 +74,10 @@ function applySettings(settings: object) {
   })
 }
 
+/**
+ * Set the saturation of theme and token colors.
+ * @param fraction 0.0 (gray) to 1.0 (no change).
+ */
 export function setSaturation(fraction: number) {
   fraction = Math.min(1, Math.max(0, fraction))
 
@@ -70,9 +85,7 @@ export function setSaturation(fraction: number) {
   const colors = getThemeColors(workbench.colorTheme)
 
   // see https://en.wikipedia.org/wiki/Munsell_color_system#Chroma
-  const desaturate = (color: string) => chroma.hex(color).desaturate((1 - fraction) * 10).hex()
-
-  // TODO only works with default light/dark, for others color arrays are empty
+  const desaturate = (color: string) => chroma.hex(color).desaturate((1 - fraction) * 5).hex()
 
   const newColors = {} as ThemeColors;
   Object.entries(colors.colors)

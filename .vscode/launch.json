@@ -14,8 +14,7 @@
         "--user-data-dir=${workspaceFolder}/tmp",
         "--disable-extensions=true",
         "--extensionDevelopmentPath=${workspaceFolder}",
-        "--enable-proposed-api=muuvmuuv.vscode-sundial",
-        "${workspaceFolder}/testProject"
+        "${workspaceFolder}"
       ],
       "outFiles": [
         "${workspaceFolder}/dist/*.js"

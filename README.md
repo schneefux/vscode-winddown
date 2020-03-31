@@ -1,5 +1,7 @@
 # Winddown
 
+Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.tokenColorCustomizations`.
+
 ## Development
 
 1. `npm install`

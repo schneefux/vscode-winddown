@@ -1,43 +1,58 @@
-'use strict'
-
-import { window, ExtensionContext, commands, workspace, ConfigurationChangeEvent } from 'vscode'
-import Winddown from './winddown'
+import { window, ExtensionContext, workspace, ConfigurationChangeEvent } from 'vscode'
+import Winddown, { WinddownConfiguration } from './winddown'
 
 const winddown = new Winddown()
 
+/**
+ * Log user activity.
+ */
 function onActivity() {
-  winddown.logActivity()
+  winddown.logActivity();
 }
 
+/**
+ * Update the color configuration.
+ */
 function onChange() {
-  winddown.update()
+  winddown.update();
+}
+
+/**
+ * Reload the configuration.
+ */
+function reconfigure() {
+  const config = workspace.getConfiguration('winddown') as WinddownConfiguration;
+  winddown.configure(config);
 }
 
 function configChanged(event: ConfigurationChangeEvent) {
-  const darkColorTheme = event.affectsConfiguration('workbench.preferredDarkColorTheme')
-  const lightColorTheme = event.affectsConfiguration('workbench.preferredDarkColorTheme')
-
-  if (darkColorTheme || lightColorTheme) {
+  if (event.affectsConfiguration('workbench.preferredDarkColorTheme') ||
+      event.affectsConfiguration('workbench.preferredDarkColorTheme') ||
+      event.affectsConfiguration('workbench.colorTheme')) {
     onChange();
+  }
+
+  if (event.affectsConfiguration('winddown')) {
+    reconfigure();
   }
 }
 
 export function activate(context: ExtensionContext) {
   Winddown.extensionContext = context
-  winddown.enableExtension()
+  reconfigure();
+  winddown.start();
+  onChange();
 
-  context.subscriptions.push(window.onDidChangeWindowState(onActivity)) // TODO disable on unfocus?
-  context.subscriptions.push(window.onDidChangeActiveTextEditor(onActivity))
-  context.subscriptions.push(window.onDidChangeTextEditorViewColumn(onActivity))
-  context.subscriptions.push(window.onDidChangeTextEditorSelection(onActivity))
-  context.subscriptions.push(window.onDidChangeActiveTextEditor(onActivity))
+  // TODO disable extension on unfocus?
+  context.subscriptions.push(window.onDidChangeWindowState(onActivity));
+  context.subscriptions.push(window.onDidChangeActiveTextEditor(onActivity));
+  context.subscriptions.push(window.onDidChangeTextEditorViewColumn(onActivity));
+  context.subscriptions.push(window.onDidChangeTextEditorSelection(onActivity));
+  context.subscriptions.push(window.onDidChangeActiveTextEditor(onActivity));
 
-  context.subscriptions.push(workspace.onDidChangeConfiguration(configChanged))
-
-  commands.registerCommand('winddown.enableExtension', () => winddown.disableExtension())
-  commands.registerCommand('winddown.disableExtension', () => winddown.disableExtension())
+  context.subscriptions.push(workspace.onDidChangeConfiguration(configChanged));
 }
 
 export function deactivate() {
-  winddown.disableExtension()
+  winddown.stop();
 }

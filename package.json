@@ -6,18 +6,15 @@
   "author": {
     "name": "schneefux"
   },
+  "publisher": "schneefux",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schneefux/winddown"
+  },
   "main": "dist/extension.js",
   "scripts": {
     "dev": "webpack --mode development --progress",
-    "prod": "webpack --mode production --progress --env.analyze",
-    "watch": "webpack --mode development --watch",
-    "vscode:prepublish": "webpack --mode production",
-    "lint": "run-s lint:*",
-    "lint:js": "eslint --cache --ext js,ts src",
-    "lint:commit": "commitlint --from HEAD~1",
-    "compile": "tsc -p .",
-    "release": "env-cmd -f .env release-it",
-    "pretty": "pretty-quick"
+    "build": "webpack --mode production"
   },
   "dependencies": {
     "chroma-js": "^2.1.0",
@@ -28,15 +25,11 @@
     "@types/json5": "0.0.30",
     "@types/node": "12.12.26",
     "@types/vscode": "1.42.0",
-    "@typescript-eslint/eslint-plugin": "^2.20.0",
-    "@typescript-eslint/parser": "^2.20.0",
     "clean-webpack-plugin": "^3.0.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-prettier": "^3.1.2",
     "terser-webpack-plugin": "^2.3.5",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.5",
+    "vsce": "^1.74.0",
     "webpack": "^4.41.5",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-cli": "^3.3.10"
@@ -46,5 +39,28 @@
   },
   "activationEvents": [
     "*"
-  ]
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Winddown configuration",
+      "properties": {
+        "winddown.minutesTillBreak": {
+          "type": "number",
+          "default": 15,
+          "description": "Time in minutes until the theme starts fading out."
+        },
+        "winddown.saturationDecayPerMinute": {
+          "type": "number",
+          "default": 0.2,
+          "description": "Fadeout speed. A value of 1.0 means that colors will have faded out within one minute."
+        },
+        "winddown.breakDurationMinutes": {
+          "type": "number",
+          "default": 3,
+          "description": "Duration in minutes until theme colors are reset to normal."
+        }
+      }
+    }
+  }
 }

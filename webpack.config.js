@@ -1,26 +1,10 @@
 const { resolve } = require('path')
-const { BannerPlugin } = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-
-const pkg = require('./package.json')
-
-const banner = `${'-'.repeat(20)}
-${pkg.displayName} (${pkg.name})
-${pkg.description}
-
-@version ${pkg.version}
-@license ${pkg.license}
-@author ${pkg.author.name} (${pkg.author.url})
-@readme ${pkg.homepage}
-@pkg ${pkg.repository}
-${'-'.repeat(20)}`
 
 module.exports = (_, argv) => {
   const isDev = (argv.mode && argv.mode === 'development') || false
-  const analyze = (argv.env && argv.env.analyze) || false
-  console.log('Development:', isDev)
+  console.log('Development', isDev)
 
   return {
     target: 'node',
@@ -55,10 +39,6 @@ module.exports = (_, argv) => {
       new CleanWebpackPlugin({
         cleanOnceBeforeBuildPatterns: [resolve(__dirname, 'dist')],
       }),
-      new BannerPlugin(banner),
-      new BundleAnalyzerPlugin({
-        analyzerMode: analyze ? 'server' : 'disabled',
-      }),
     ],
     module: {
       rules: [
@@ -72,11 +52,6 @@ module.exports = (_, argv) => {
           ],
         },
       ],
-    },
-    stats: {
-      performance: true,
-      providedExports: true,
-      timings: true,
     },
   }
 }
