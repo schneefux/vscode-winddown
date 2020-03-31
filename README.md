@@ -1,4 +1,10 @@
-# Winddown
+# Winddown - Write code and stay healthy
+
+Be reminded to get off the screen without being interrupted.
+
+After 15 minutes, winddown slowly fades out the colors until you take your hands off the keyboard for a moment.
+
+![demo gif](https://raw.githubusercontent.com/schneefux/winddown/master/demo.gif)
 
 Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.tokenColorCustomizations`.
 

@@ -43,7 +43,7 @@ export function activate(context: ExtensionContext) {
   winddown.start();
   onChange();
 
-  // TODO disable extension on unfocus?
+  // TODO try again after a short break
   context.subscriptions.push(window.onDidChangeWindowState(onActivity));
   context.subscriptions.push(window.onDidChangeActiveTextEditor(onActivity));
   context.subscriptions.push(window.onDidChangeTextEditorViewColumn(onActivity));
