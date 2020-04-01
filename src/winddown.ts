@@ -2,9 +2,10 @@ import { ExtensionContext, WorkspaceConfiguration, StatusBarItem, window, Status
 import * as editor from './editor'
 
 export interface WinddownConfiguration extends WorkspaceConfiguration {
+  framesPerMinute: number;
   minutesTillBreak: number;
-  saturationDecayPerMinute: number;
   breakDurationMinutes: number;
+  winddownDurationMinutes: number;
 }
 
 export default class Winddown {
@@ -13,9 +14,10 @@ export default class Winddown {
   public static extensionContext: ExtensionContext
 
   private config = {
-    minutesTillBreak: 15,
-    saturationDecayPerMinute: 0.2,
+    framesPerMinute: 4,
+    minutesTillBreak: 25,
     breakDurationMinutes: 3,
+    winddownDurationMinutes: 5,
   } as WinddownConfiguration;
   private firstActive: number // end of last break
   private lastActive: number // last activity
@@ -23,19 +25,22 @@ export default class Winddown {
   private statusBarItem!: StatusBarItem;
 
   constructor() {
-    this.firstActive = Date.now()
-    this.lastActive = Date.now()
+    this.firstActive = Date.now();
+    this.lastActive = Date.now();
   }
 
   public start() {
+    editor.reset();
+    const framesPerMinute = Math.min(60, Math.max(1, this.config.framesPerMinute));
     this.timer = setInterval(() => {
       this.update()
-    }, 1000 * 15)
+    }, 1000 * 60 / framesPerMinute);
     this.update();
   }
 
   public stop() {
     clearInterval(this.timer)
+    editor.reset();
   }
 
   public configure(config: WinddownConfiguration) {
@@ -61,7 +66,7 @@ export default class Winddown {
     if (minutesSinceLastActive > this.config.breakDurationMinutes) {
       // on a break
       this.firstActive = Date.now();
-      editor.setSaturation(1);
+      editor.reset();
       if (this.statusBarItem) {
         this.statusBarItem.hide();
       }
@@ -70,7 +75,8 @@ export default class Winddown {
       if (minutesSinceFirstActive > this.config.minutesTillBreak) {
         // needs a break
         const overtimeMinutes = minutesSinceFirstActive - this.config.minutesTillBreak;
-        editor.setSaturation(1 - overtimeMinutes * this.config.saturationDecayPerMinute);
+        const overtimeFraction = overtimeMinutes / this.config.winddownDurationMinutes;
+        editor.setSaturation(1 - overtimeFraction);
         if (!this.statusBarItem) {
           this.statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
         }

@@ -42,22 +42,27 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "Winddown configuration",
+      "title": "Winddown",
       "properties": {
         "winddown.minutesTillBreak": {
           "type": "number",
-          "default": 15,
-          "description": "Time in minutes until the theme starts fading out."
+          "default": 25,
+          "description": "Time in minutes until theme colors start fading out."
         },
-        "winddown.saturationDecayPerMinute": {
+        "winddown.winddownDurationMinutes": {
           "type": "number",
-          "default": 0.2,
-          "description": "Fadeout speed. A value of 1.0 means that colors will have faded out within one minute."
+          "default": 5,
+          "description": "Time in minutes until theme colors have fully faded out."
         },
         "winddown.breakDurationMinutes": {
           "type": "number",
           "default": 3,
-          "description": "Duration in minutes until theme colors are reset to normal."
+          "description": "Time in minutes until theme colors are reset to normal."
+        },
+        "winddown.framesPerMinute": {
+          "type": "number",
+          "default": 4,
+          "description": "Color update frequency during winddown. Usually you do not need to change this. Lower it if you are distracted by screen flashes, increase it for smoother color transitions. Must be between 1 and 60."
         }
       }
     }

@@ -63,14 +63,8 @@ function applySettings(settings: object) {
   }
   const workspaceSettings = workspace.getConfiguration()
   Object.keys(settings).forEach((k) => {
-    workspaceSettings.update(k, settings[k], true).then(undefined, (reason: string) => {
-      console.error(reason)
-      window.showErrorMessage(
-        `You tried to apply \`${k}: ${settings[k]}\` but this is not a valid VS Code settings
-          key/value pair. Please make sure all settings that you give to Sundial are valid
-          inside VS Code settings!`
-      )
-    })
+    workspaceSettings.update(k, settings[k], true)
+      .then(undefined, (reason: string) => console.error(reason))
   })
 }
 
@@ -108,4 +102,19 @@ export function setSaturation(fraction: number) {
       'textMateRules': newTokenRules,
     },
   });
+}
+
+/**
+ * Clear all customizations.
+ */
+export function reset() {
+  const workspaceSettings = workspace.getConfiguration();
+  Object.keys(workspaceSettings.get('workbench.colorCustomizations') || {}).forEach(key => {
+    workspaceSettings.update(key, undefined, true)
+      .then(undefined, (reason: string) => console.error(reason))
+  });
+  workspaceSettings.update('editor.tokenColorCustomizations', undefined, true)
+    .then(undefined, (reason: string) => console.error(reason))
+  workspaceSettings.update('workbench.colorCustomizations', undefined, true)
+    .then(undefined, (reason: string) => console.error(reason))
 }
