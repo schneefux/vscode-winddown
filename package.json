@@ -6,10 +6,10 @@
   "author": {
     "name": "schneefux"
   },
-  "publisher": "schneefux",
+  "publisher": "winddown",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/schneefux/winddown"
+    "url": "git+https://github.com/schneefux/vscode-winddown"
   },
   "main": "dist/extension.js",
   "scripts": {
