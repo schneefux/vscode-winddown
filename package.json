@@ -2,7 +2,7 @@
   "name": "vscode-winddown",
   "displayName": "Winddown",
   "version": "0.0.1",
-  "description": "",
+  "description": "Be reminded to get off the screen without being interrupted.",
   "author": {
     "name": "schneefux"
   },
