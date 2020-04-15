@@ -21,6 +21,7 @@ export default class Winddown {
   } as WinddownConfiguration;
   private firstActive: number // end of last break
   private lastActive: number // last activity
+  private currentSaturation = 1.0
   private timer!: NodeJS.Timer
   private statusBarItem!: StatusBarItem;
 
@@ -30,6 +31,7 @@ export default class Winddown {
   }
 
   public start() {
+    this.currentSaturation = 1.0
     editor.reset();
     const framesPerMinute = Math.min(60, Math.max(1, this.config.framesPerMinute));
     this.timer = setInterval(() => {
@@ -39,6 +41,7 @@ export default class Winddown {
   }
 
   public stop() {
+    this.currentSaturation = 1.0
     clearInterval(this.timer)
     editor.reset();
   }
@@ -76,7 +79,14 @@ export default class Winddown {
         // needs a break
         const overtimeMinutes = minutesSinceFirstActive - this.config.minutesTillBreak;
         const overtimeFraction = overtimeMinutes / this.config.winddownDurationMinutes;
-        editor.setSaturation(1 - overtimeFraction);
+        const newSaturation = 1 - overtimeFraction
+
+        // avoid refreshes that do not change colors perceivably
+        if (Math.abs(this.currentSaturation - newSaturation) > 0.01) {
+          this.currentSaturation = newSaturation
+          editor.setSaturation(1 - overtimeFraction);
+        }
+
         if (!this.statusBarItem) {
           this.statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
         }

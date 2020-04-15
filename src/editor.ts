@@ -58,13 +58,13 @@ function getThemeColors(themeName: string): { colors: ThemeColors, tokenRules: a
  * @param settings key-values to write into the configuration
  */
 function applySettings(settings: object) {
-  if (!settings) {
-    return
-  }
   const workspaceSettings = workspace.getConfiguration()
   Object.keys(settings).forEach((k) => {
-    workspaceSettings.update(k, settings[k], true)
-      .then(undefined, (reason: string) => console.error(reason))
+    // do not update if values are the same (settings are ordered)
+    if (JSON.stringify(settings) !== JSON.stringify(workspaceSettings.get(k))) {
+      workspaceSettings.update(k, settings[k], true)
+        .then(undefined, (reason: string) => console.error(reason))
+    }
   })
 }
 
