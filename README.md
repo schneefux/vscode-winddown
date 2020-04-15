@@ -25,3 +25,9 @@ Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.
 
   * `npm install`
   * In VS Code, "Run", "Start Debugging"
+
+## Publishing
+
+  * `npm run build`
+  * `vsce package`
+  * Upload to https://marketplace.visualstudio.com/manage/publishers/winddown
