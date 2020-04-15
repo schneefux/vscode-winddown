@@ -1,7 +1,7 @@
 {
   "name": "vscode-winddown",
   "displayName": "Winddown",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Be reminded to get off the screen without being interrupted.",
   "author": {
     "name": "schneefux"
@@ -40,6 +40,12 @@
     "*"
   ],
   "contributes": {
+    "commands": [
+      {
+        "command": "winddown.postpone",
+        "title": "Winddown: Restore the colors and postpone the current break for a few minutes"
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "Winddown",
@@ -63,6 +69,11 @@
           "type": "number",
           "default": 4,
           "description": "Color update frequency during winddown. Usually you do not need to change this. Lower it if you are distracted by screen flashes, increase it for smoother color transitions. Must be between 1 and 60."
+        },
+        "winddown.postponeDurationMinutes": {
+          "type": "number",
+          "default": 5,
+          "description": "Time in minutes you can postpone your break."
         }
       }
     }

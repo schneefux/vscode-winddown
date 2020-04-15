@@ -19,6 +19,7 @@ Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.
   * `winddown.minutesTillBreak` (default 25): Time in minutes until theme colors start fading out.
   * `winddown.winddownDurationMinutes` (default 5): Time in minutes until theme colors have fully faded out.
   * `winddown.breakDurationMinutes` (default 3): Time in minutes until theme colors are reset to normal.
+  * `winddown.postponeDurationMinutes` (default 5): Time in minutes you can postpone your break.
   * `winddown.framesPerMinute` (default 4): Color update frequency during winddown. Usually you do not need to change this. Lower it if you are distracted by screen flashes, increase it for smoother color transitions. Must be between 1 and 60.
 
 ## Development

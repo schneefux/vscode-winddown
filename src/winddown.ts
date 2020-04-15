@@ -6,6 +6,7 @@ export interface WinddownConfiguration extends WorkspaceConfiguration {
   minutesTillBreak: number;
   breakDurationMinutes: number;
   winddownDurationMinutes: number;
+  postponeDurationMinutes: number;
 }
 
 export default class Winddown {
@@ -18,6 +19,7 @@ export default class Winddown {
     minutesTillBreak: 25,
     breakDurationMinutes: 3,
     winddownDurationMinutes: 5,
+    postponeDurationMinutes: 5,
   } as WinddownConfiguration;
   private firstActive: number // end of last break
   private lastActive: number // last activity
@@ -30,25 +32,38 @@ export default class Winddown {
     this.lastActive = Date.now();
   }
 
-  public start() {
-    this.currentSaturation = 1.0
+  private reset() {
     editor.reset();
+    this.currentSaturation = 1.0
+    if (this.statusBarItem) {
+      this.statusBarItem.hide();
+    }
+  }
+
+  public start() {
     const framesPerMinute = Math.min(60, Math.max(1, this.config.framesPerMinute));
     this.timer = setInterval(() => {
       this.update()
     }, 1000 * 60 / framesPerMinute);
-    this.update();
+    this.reset();
   }
 
   public stop() {
-    this.currentSaturation = 1.0
+    this.reset()
     clearInterval(this.timer)
-    editor.reset();
   }
 
   public configure(config: WinddownConfiguration) {
     this.config = config;
     this.update();
+  }
+
+  /**
+   * Postpone the break.
+   */
+  public postpone() {
+    this.firstActive = Date.now() - (this.config.minutesTillBreak - this.config.postponeDurationMinutes) * 1000 * 60
+    this.reset()
   }
 
   /**
@@ -69,10 +84,7 @@ export default class Winddown {
     if (minutesSinceLastActive > this.config.breakDurationMinutes) {
       // on a break
       this.firstActive = Date.now();
-      editor.reset();
-      if (this.statusBarItem) {
-        this.statusBarItem.hide();
-      }
+      this.reset()
     } else {
       // still coding
       if (minutesSinceFirstActive > this.config.minutesTillBreak) {
@@ -89,9 +101,10 @@ export default class Winddown {
 
         if (!this.statusBarItem) {
           this.statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
+          this.statusBarItem.command = 'winddown.postpone'
         }
+        this.statusBarItem.text = 'You should take a break! (Click for ' + this.config.postponeDurationMinutes + ' more minutes)';
         this.statusBarItem.show();
-        this.statusBarItem.text = 'You should take a break!';
       }
     }
   }
