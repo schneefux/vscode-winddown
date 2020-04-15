@@ -14,6 +14,13 @@ Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.
 
 [Install winddown from the VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=winddown.vscode-winddown)
 
+## Configuration
+
+  * `winddown.minutesTillBreak` (default 25): Time in minutes until theme colors start fading out.
+  * `winddown.winddownDurationMinutes` (default 5): Time in minutes until theme colors have fully faded out.
+  * `winddown.breakDurationMinutes` (default 3): Time in minutes until theme colors are reset to normal.
+  * `winddown.framesPerMinute` (default 4): Color update frequency during winddown. Usually you do not need to change this. Lower it if you are distracted by screen flashes, increase it for smoother color transitions. Must be between 1 and 60.
+
 ## Development
 
   * `npm install`
