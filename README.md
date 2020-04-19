@@ -32,3 +32,7 @@ Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.
   * `npm run build`
   * `vsce package`
   * Upload to https://marketplace.visualstudio.com/manage/publishers/winddown
+
+## Related Projects
+
+  * [emacs-winddown](https://github.com/syohex/emacs-winddown)
