@@ -36,3 +36,4 @@ Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.
 ## Related Projects
 
   * [emacs-winddown](https://github.com/syohex/emacs-winddown)
+  * [Atheos-winddown](https://github.com/HLSiira/Atheos-Winddown)
