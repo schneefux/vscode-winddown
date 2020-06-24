@@ -35,5 +35,6 @@ Warning! This plugin will overwrite `workbench.colorCustomizations` and `editor.
 
 ## Related Projects
 
+  * inspired by Android's [Digital Wellbeing](https://www.android.com/digital-wellbeing/)
   * [emacs-winddown](https://github.com/syohex/emacs-winddown)
   * [Atheos-winddown](https://github.com/HLSiira/Atheos-Winddown)
